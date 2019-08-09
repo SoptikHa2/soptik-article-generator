@@ -57,6 +57,8 @@ Tag index file can be reached by clicking any tag. It contains list of tags, sor
 their frequency. If user has enabled javascript, posts can be filtered by clicking on individual tags.
 
 User-provided files `index.html`, `head.html` and `tail.html` have higher priority. 
+If you decide to provide custom `index.html`, list of articles will be placed
+instead of any occurrence of `>>>>>ARTICLES_HERE<<<<<`.
 Tag navigation can be turned off by passing `--no-tags` option when compiling.
 
 An example is in `web-source` and `web-output` folders.

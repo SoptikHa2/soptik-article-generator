@@ -1,0 +1,36 @@
+body {
+	color: #444;
+	margin: 40px auto;
+	max-width: 650px;
+	line-height: 1.6;
+	font-size: 18px;
+	padding: 0 10px;
+}
+h1, h2, h3 {
+	line-height: 1.2;
+}
+pre, code {
+	background-color: #ddd;
+	font-family: "Courier New", Courier, monospace;
+	padding: 2px;
+}
+a, a:visited {
+	color: #208c0f;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+.bottom-nav {
+	width: 100%;
+	text-align: center;
+}
+.bottom-nav a {
+	margin: 8px;
+}
+
+.tag {
+	display: inline-block;
+	margin: 4px;
+}
