@@ -8,7 +8,7 @@ the need to download everything else. Just \*sh scripts and awk (requires 'gawk'
 Everything is compiled from markdown files, which are anotated to help awk with processing.
 Supported markdown file looks like this:
 
-```md
+````markdown
 [ building-soptik-page-generator, 2019-08-09, soptik, markdown, awk ]
 How I built the Soptik page generator
 
@@ -18,12 +18,12 @@ other parts, just not linked - edit URL to get there), I was able to make it wor
 
 # Code
 
-\```
+```
 # No syntax highlighting yet :-(
 for file in "*.md" {
 	do-magic "$file"
 }
-\```
+```
 
 # Quotes
 
@@ -34,7 +34,7 @@ Do you know this quote? I really like it!
 > Don't flip the web pyramid!
 - Jan Hus
 
-```
+````
 
 First line has to contain metadata, enclosed inside `[ ... ]` (optional, but recommended)
 and delimited by `,`. All whitespaces are ignored. First field is URL and name of resulting
