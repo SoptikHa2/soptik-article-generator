@@ -21,7 +21,7 @@ other parts, just not linked - edit URL to get there), I was able to make it wor
 
 ```
 # No syntax highlighting yet :-(
-for file in \*".md" {
+for file in *".md" {
 	do-magic "$file"
 }
 ```
