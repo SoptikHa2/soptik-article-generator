@@ -39,11 +39,12 @@ Do you know this quote? I really like it!
 
 First line has to contain metadata, enclosed inside `[ ... ]` (optional, but recommended)
 and delimited by `,`. All whitespaces are ignored. First field is URL and name of resulting
-.html file. It's recommended to be the same (or at least simmilar to) original .md filename,
-so you won't get confused when you want to fix the typo. Second field is date, and the
+.html file. Second field is date, and the
 rest are tags. *Soptik* generates list of tags, so tags are clickable and one can filter by them.
 Second line is heading, which gets formated differently than anything else in the article.
 Third line (which can be empty) is summary paragraph, which is shown at index page.
+
+Please note that the order in which the articles are processed (the previous-next links and the index file content) is the default alphabetical one, but reversed. This way, if you name article files with datetime (such as `2019-09-16.md`), you'll get them sorted at the index page, from the newest one to the oldest one. If you want different html filename (and url), specify it in metadata.
 
 ## Special files and navigation
 The first thing Soptik does is copying preset files into output directory. You can provide your own files, which will override the default ones. You can see default files in `/resources`.
