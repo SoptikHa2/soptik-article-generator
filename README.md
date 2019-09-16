@@ -56,6 +56,6 @@ The first thing Soptik does is copying preset files into output directory. You c
 - `base.css` defines dimensions and position of various elements on site, and imports by default `base-dark.css`, which provides colors. You can edit `base.css` to instead link to `base-light.css` for white theme, or make your own one.
 - `head.tags.html` and `tail.tags.html` is exactly what you would expect.
 
-Please note that there is a special javascript file: `tags.js`. You can override it, but please don't, unless you know what you're doing. This file allows filtering tags. So when you click on tag name, it displays you only articles with specified tag name, and not all of them.
+Please note that there is a special javascript file: `tags.js`. You can override it, but please don't, unless you know what you're doing. This file allows filtering tags. So when you click on tag name, it displays you only articles with specified tag name, and not all of them. This is the only place where we use javascript by default, and it's unfortunately required for the correct functionality.
 
 You can always turn tags off with option `--no-tags`.
