@@ -30,13 +30,10 @@ for file in *".md" {
 
 Do you know this quote?
 
+## Quote about quotes
+
 > Quotes are amazing.
 Quote lover
-
-## My favorite quote
-
-> Don't flip the web pyramid!
-- Jan Hus
 
 ````
 
