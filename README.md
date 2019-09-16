@@ -28,7 +28,10 @@ for file in *".md" {
 
 # Quotes
 
-Do you know this quote? I really like it!
+Do you know this quote?
+
+> Quotes are amazing.
+Quote lover
 
 ## My favorite quote
 
