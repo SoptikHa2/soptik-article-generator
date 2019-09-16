@@ -1,21 +1,22 @@
+@import url('base-dark.css'); /* Import colors */
+
+
 body {
-	color: #444;
 	margin: 40px auto;
 	max-width: 650px;
 	line-height: 1.6;
 	font-size: 18px;
 	padding: 0 10px;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 h1, h2, h3 {
 	line-height: 1.2;
 }
 pre, code {
-	background-color: #ddd;
 	font-family: "Courier New", Courier, monospace;
 	padding: 2px;
 }
 a, a:visited {
-	color: #208c0f;
 	text-decoration: none;
 }
 a:hover {
@@ -30,7 +31,18 @@ a:hover {
 	margin: 8px;
 }
 
-.tag {
+.tag, .index-entry-tag {
 	display: inline-block;
 	margin: 4px;
+}
+
+.index-click-more-label {
+	display: block;
+	text-align: right;
+}
+.index-entry-tags { 
+	float: right;
+}
+.index-entry-heading {
+	display: inline;
 }

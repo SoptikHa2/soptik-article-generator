@@ -1,0 +1,11 @@
+body {
+	color: #cca;
+	background-color: #222;
+}
+pre, code {
+	background-color: #222;
+	color: #eee;
+}
+a, a:visited {
+	color: #98ce90;
+}

@@ -8,20 +8,29 @@
 #
 # Files with extension ".md" are converted into HTML and the
 # new HTML file is placed into the "outputDirectory".
+# Forbidden filenames are "{head.*,tail.*}.md"
 #
 # Files with extension "*.css" and "*.js" are simply
-# copied into "outputDirectory/{css,js}".
+# copied into directory "outputDirectory/{css,js}".
+#
+# If you want to specify custom css theme, create "base.css" in source folder.
+# You can use "@import url('base-light.css')" for default light theme (and 'base-dark' for default dark theme)
 #
 # Other files are copied into "outputDirectory".
 #
 # This by default creates index.html and adds navigation (prev/index/next)
-# to all files. This can be overwritten by custom {head.html,tail.html,index.html,tags.html,base.css} in source directory.
-# Files that are used to generate HTML ({head.html,tail.html,base.css}) won't be copied into "outputDirectory".
+# to all files. This can be overwritten by custom {head.html,tail.html,head.index.html,tail.index.html,base.css} in source directory.
+# Files that are used to generate HTML ({head.html,tail.html,...}) won't be copied into "outputDirectory".
 #
 # By default tag index (with filtering) is created as well, this can be prevented by
 # setting the --no-tags parameter.
 #
 # Markdown specification can be found in README file.
+#
+# EXIT CODES
+# 0 => Ok
+# 99 => Configuration error
+# (other) => Error while generating. Verify correct *md files structure.
 
 
 # Exit on any error
@@ -44,8 +53,8 @@ output_directory="outputDirectory"
 
 # Parse arguments
 if [ $# -lt 1 ]; then
-	>&2 echo "Usage: compile.sh <source directory> [output directory] "
-	exit 1
+	>&2 echo "Usage: compile.sh <source directory> [output directory] [--no-tags]"
+	exit 99
 fi
 source_directory="$1"
 if [[ "$*" == *"--no-tags"* ]]; then
@@ -55,53 +64,84 @@ if [ $# -ge 2 ] && [ "$2" != "--no-tags" ]; then
 	output_directory="$2"
 fi
 
-
-
-
 #┌─────────────────┐
 #│    S T A R T    │
 #└─────────────────┘
 
+# Check for invalid file names
+for markdown_filename in "$source_directory"/*.md; do
+	if [[ "$markdown_filename" =~ "$source_directory"\/tail.*\.md || "$markdown_filename" =~ "$source_directory"\/head.*\.md ]]
+	then
+		>&2 echo "Forbidden filename in input directory: $markdown_filename. Filenames 'tail*.md' and 'head*.md' are forbidden."
+		exit 99
+	fi
+done
+
 # Prepare output directory
-mkdir -p "$output_directory"
-mkdir -p "$output_directory/css"
-mkdir -p "$output_directory/js"
-cp {"head.html","tail.html","index.html"} "$output_directory/html"
-cp "base.css" "$output_directory/css"
-$do_generate_tags && cp "tags.html" "$output_directory/tags.html"
+mkdir -p "$output_directory/html/css"
+mkdir -p "$output_directory/html/js"
 
-# Copy user-provided files
-cp "$source_directory"/*.html "$output_directory" || true
-cp "$source_directory"/*.css "$output_directory/css" || true
-cp "$source_directory"/*.js "$output_directory/js" || true
-cp "$source_directory/!(*@(.css|.html|.js))" "$output_directory" || true
+# Copy default index, head, tail, css.
+cp "resources/"{"head","tail"}*.html "$output_directory"
+cp "resources/"*.css "$output_directory/html/css"
 
-# Index.html
-tempfile_index_content=$(mktemp)
+# Copy user-provided head, tail, html, css and js - if any
+cp {"$source_directory/head*.html","$source_directory/tail*.html"} "$output_directory" 2>/dev/null || true
+cp "$source_directory/*.css" "$output_directory/html/css" 2>/dev/null || true
+cp "$source_directory/*.js" "$output_directory/html/js" 2>/dev/null || true
+cp "$source_directory/*.html" "$output_directory/html" 2>/dev/null || true
+
+# Prepare index file
+cat "$output_directory/head.html" > "$output_directory/html/index.html"
+cat "$output_directory/head.index.html" >> "$output_directory/html/index.html"
+
+# Create list of files for fast navigation
+tmp_result_filenames=$(mktemp)
 for filename in "$source_directory"/*.md; do
-	newname=$(tr -d "\[ \]" <<< "$(head -1 "$filename")" | cut -d, -f1)
+	newname_without_extension=$(head -1 < "$filename" | cut -d"," -f1 | tr -d "\[ \]")
+	echo "$newname_without_extension" >> "$tmp_result_filenames"
+	printf "\n" >> "$tmp_result_filenames"
+done
+
+# Generate html files out of user md files.
+# While doing this, write the files into index file AND tags file, if any.
+# This loop basically does everything.
+counter=1
+for filename in "$source_directory"/*.md; do
+	# Get basic info about file
+	newname_without_extension=$(head -1 < "$filename" | cut -d"," -f1 | tr -d "\[ \]")
 	number_of_words=$(wc -w "$filename" | cut -d" " -f1)
-	echo "<p><a href=\"$newname.html\">$newname</a>, $number_of_words words</p>" >> "$tempfile_index_content"
+	heading=$(sed -n 2p "$filename")
+	summary=$(sed -n 3p "$filename")
+
+	# Generate .html file from it
+	if [[ $counter -gt 1 ]]; then
+		previous_filename=$(sed -n $((counter-1))p "$tmp_result_filenames")
+	else
+		previous_filename=""
+	fi
+	next_filename=$(sed -n $((counter+1))p "$tmp_result_filenames")
+	cat "$output_directory/head.html" > "$output_directory/html/$newname_without_extension.html"
+	gawk -f convert-to-html.awk -v previous_filename="$previous_filename" -v next_filename="$next_filename" -- "$filename" >> "$output_directory/html/$newname_without_extension.html"
+	cat "$output_directory/tail.html" >> "$output_directory/html/$newname_without_extension.html"
+	# And change .html file <title>
+	sed -i 's/<title>.*<\/title>/<title>'"$heading"'<\/title>/' "$output_directory/html/$newname_without_extension.html"
+
+	# Add it into index
+	gawk -f convert-to-index-entry.awk -v number_of_words="$number_of_words" -v heading="$heading" -v summary="$summary" -v address="$newname_without_extension.html" -- "$filename" >> "$output_directory/html/index.html"
+
+	# TODO: Tags
+
+	counter=$((counter+1))
 done
-tempfile_full_indexfile_content=$(mktemp)
-sed "s/>>>>>ARTICLES_HERE<<<<</$(cat "$tempfile_index_content")/g" < "$source_directory/index.html" > "$tempfile_full_indexfile_content"
-mv "$tempfile_full_indexfile_content" "$source_directory/index.html"
-rm -f $"tempfile_full_indexfile_content"
-rm -f $"tempfile_index_content"
 
-# Process markdown
-for filename in "$source_directory"/*.md; do
-	newname=$(tr -d "\[ \]" <<< "$(head -1 "$filename")" | cut -d, -f1)
-	cp "head.html" "$output_directory/$newname.html"
-	gawk -f convert-to-html.awk -- "$filename" >> "$output_directory/$newname.html"
-	cat "tail.html" >> "$output_directory/$newname.html"
-done
+# Finish index file
+cat "$output_directory/tail.index.html" >> "$output_directory/html/index.html"
+cat "$output_directory/tail.html" >> "$output_directory/html/index.html"
+# Index title will be the same as <h1> content in index
+h1_content_in_index=$(grep -e '<h1>.*</h1>' "$output_directory/html/index.html" | sed 's/<[^<]*>//g' | sed 's/^ *\t*//' | sed 's/ *\t*$//' | head -1)
+sed -i 's/<title>.*<\/title>/<title>'"$h1_content_in_index"'<\/title>/' "$output_directory/html/index.html"
 
-# Generate tags
-if [ $do_generate_tags ]; then
-	rm -f "$output_directory/js/tags.js"
-	for filename in "$source_directory"/*.md; do
-		awk -f generate-tags.awk -- "$filename" >> "$output_directory/js/tags.js"
-	done
-fi
-
+# Clean everything
+rm -f "$tmp_result_filenames"
+rm -f "$output_directory/"{"head","tail"}*.html

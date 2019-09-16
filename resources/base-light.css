@@ -1,0 +1,12 @@
+body {
+	color: #444;
+}
+h1, h2, h3 {
+	line-height: 1.2;
+}
+pre, code {
+	background-color: #ddd;
+}
+a, a:visited {
+	color: #208c0f;
+}
