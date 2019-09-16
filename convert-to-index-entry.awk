@@ -21,7 +21,7 @@ END {
 		print "<div class='index-entry-tags'>"
 			for ( tag in tags ) {
 				print "<span class='index-entry-tag'>"
-					print tags[tag]
+					print "<a href='tags.html?tag="tags[tag]"'>"tags[tag]"</a>"
 				print "</span>"
 			}
 		print "</div>"

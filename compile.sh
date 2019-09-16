@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# shellcheck disable=SC2013
+
+
 # Compile folder. Convert markdown into HTML.
 
 # Synopsis:
@@ -95,19 +99,23 @@ cp "$source_directory/*.html" "$output_directory/html" 2>/dev/null || true
 cat "$output_directory/head.html" > "$output_directory/html/index.html"
 cat "$output_directory/head.index.html" >> "$output_directory/html/index.html"
 
+# Prepare list of *md files provided by user that will be processed.
+# We need them in reversed order
+tmp_all_filenames_reversed=$(mktemp)
+ls "$source_directory/"*.md -r > "$tmp_all_filenames_reversed";
+
 # Create list of files for fast navigation
 tmp_result_filenames=$(mktemp)
-for filename in "$source_directory"/*.md; do
+for filename in $(cat "$tmp_all_filenames_reversed"); do
 	newname_without_extension=$(head -1 < "$filename" | cut -d"," -f1 | tr -d "\[ \]")
 	echo "$newname_without_extension" >> "$tmp_result_filenames"
-	printf "\n" >> "$tmp_result_filenames"
 done
 
 # Generate html files out of user md files.
 # While doing this, write the files into index file AND tags file, if any.
 # This loop basically does everything.
 counter=1
-for filename in "$source_directory"/*.md; do
+for filename in $(cat "$tmp_all_filenames_reversed"); do
 	# Get basic info about file
 	newname_without_extension=$(head -1 < "$filename" | cut -d"," -f1 | tr -d "\[ \]")
 	number_of_words=$(wc -w "$filename" | cut -d" " -f1)
@@ -116,13 +124,13 @@ for filename in "$source_directory"/*.md; do
 
 	# Generate .html file from it
 	if [[ $counter -gt 1 ]]; then
-		previous_filename=$(sed -n $((counter-1))p "$tmp_result_filenames")
+		next_filename=$(sed -n $((counter-1))p "$tmp_result_filenames")
 	else
-		previous_filename=""
+		next_filename=""
 	fi
-	next_filename=$(sed -n $((counter+1))p "$tmp_result_filenames")
+	previous_filename=$(sed -n $((counter+1))p "$tmp_result_filenames")
 	cat "$output_directory/head.html" > "$output_directory/html/$newname_without_extension.html"
-	gawk -f convert-to-html.awk -v previous_filename="$previous_filename" -v next_filename="$next_filename" -- "$filename" >> "$output_directory/html/$newname_without_extension.html"
+	gawk -f convert-to-html.awk -v previous_filename="$previous_filename.html" -v next_filename="$next_filename.html" -- "$filename" >> "$output_directory/html/$newname_without_extension.html"
 	cat "$output_directory/tail.html" >> "$output_directory/html/$newname_without_extension.html"
 	# And change .html file <title>
 	sed -i 's/<title>.*<\/title>/<title>'"$heading"'<\/title>/' "$output_directory/html/$newname_without_extension.html"
@@ -144,4 +152,5 @@ sed -i 's/<title>.*<\/title>/<title>'"$h1_content_in_index"'<\/title>/' "$output
 
 # Clean everything
 rm -f "$tmp_result_filenames"
+rm -f "$tmp_all_filenames_reversed"
 rm -f "$output_directory/"{"head","tail"}*.html

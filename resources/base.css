@@ -31,18 +31,18 @@ a:hover {
 	margin: 8px;
 }
 
-.tag, .index-entry-tag {
+.article-tag, .index-entry-tag {
 	display: inline-block;
 	margin: 4px;
+}
+.article-tags, .index-entry-tags { 
+	float: right;
 }
 
 .index-click-more-label {
 	display: block;
 	text-align: right;
 }
-.index-entry-tags { 
-	float: right;
-}
-.index-entry-heading {
+.article-heading, .index-entry-heading {
 	display: inline;
 }
