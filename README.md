@@ -9,11 +9,11 @@
 
 ## What is this?
 
-Soptik is yet another simple webpage generator, build to learn awk.
+Soptik is yet another simple webpage generator, built to learn awk.
 This generator uses standart tools found on every Linux machine, without
 the need to download everything else. It's just \*sh script and awk (requires 'gawk').
 
-And it's pretty fast as well! On my computer, 23 files, with total of 22975 words (or 192K) were processed in under a second (0,57s)!
+And it's pretty fast as well. On my computer, 23 files, with total of 22975 words (or 192K) were processed in under a second (0,57s)!
 
 # Source files structure
 
