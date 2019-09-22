@@ -10,28 +10,7 @@
 #
 # Where source directory contains files to be converted.
 #
-# Files with extension ".md" are converted into HTML and the
-# new HTML file is placed into the "outputDirectory".
-# Forbidden filenames are "{head.*,tail.*}.md"
-#
-# Files with extension "*.css" and "*.js" are simply
-# copied into directory "outputDirectory/{css,js}".
-#
-# If you want to specify custom css theme, create "base.css" in source folder.
-# You can use "@import url('base-light.css')" for default light theme (and 'base-dark' for default dark theme)
-#
-# Other files are copied into "outputDirectory".
-#
-# This by default creates index.html and adds navigation (prev/index/next)
-# to all files. This can be overwritten by custom {head.html,tail.html,head.index.html,tail.index.html,base.css} in source directory.
-# Files that are used to generate HTML ({head.html,tail.html,...}) won't be copied into "outputDirectory".
-#
-# By default tag index (with filtering) is created as well, this can be prevented by
-# setting the --no-tags parameter.
-#
-# Markdown specification can be found in README file.
-#
-# EXIT CODES
+# Exit codes:
 # 0 => Ok
 # 99 => Configuration error
 # (other) => Error while generating. Verify correct *md files structure.
@@ -88,16 +67,21 @@ mkdir -p "$output_directory/html/js"
 # Copy default index, head, tail, css.
 cp "resources/"{"head","tail"}*.html "$output_directory"
 cp "resources/"*.css "$output_directory/html/css"
+cp "resources/tags.html" "$output_directory/tags.html"
 
 # Copy user-provided head, tail, html, css and js - if any
 cp {"$source_directory/head*.html","$source_directory/tail*.html"} "$output_directory" 2>/dev/null || true
 cp "$source_directory/*.css" "$output_directory/html/css" 2>/dev/null || true
 cp "$source_directory/*.js" "$output_directory/html/js" 2>/dev/null || true
 cp "$source_directory/*.html" "$output_directory/html" 2>/dev/null || true
+cp "$source_directory/tags.html" "$output_directory/tags.html" 2>/dev/null || true
 
 # Prepare index file
 cat "$output_directory/head.html" > "$output_directory/html/index.html"
 cat "$output_directory/head.index.html" >> "$output_directory/html/index.html"
+
+# Remove old tags.js if any
+rm -f "$output_directory/html/js/tags.js" 2>/dev/null || true
 
 # Prepare list of *md files provided by user that will be processed.
 # We need them in reversed order
@@ -138,7 +122,10 @@ for filename in $(cat "$tmp_all_filenames_reversed"); do
 	# Add it into index
 	gawk -f convert-to-index-entry.awk -v number_of_words="$number_of_words" -v heading="$heading" -v summary="$summary" -v address="$newname_without_extension.html" -- "$filename" >> "$output_directory/html/index.html"
 
-	# TODO: Tags
+	# Add all its tags into tags temp file
+	if [[ "$do_generate_tags" == "true" ]]; then
+		gawk -f extract-tags.awk -v filename="$newname_without_extension.html" -v heading="$heading" -v description="$summary" -v wordcount="$number_of_words"  -- "$filename" >> "$output_directory/html/js/tags.js"
+	fi
 
 	counter=$((counter+1))
 done
@@ -150,7 +137,12 @@ cat "$output_directory/tail.html" >> "$output_directory/html/index.html"
 h1_content_in_index=$(grep -e '<h1>.*</h1>' "$output_directory/html/index.html" | sed 's/<[^<]*>//g' | sed 's/^ *\t*//' | sed 's/ *\t*$//' | head -1)
 sed -i 's/<title>.*<\/title>/<title>'"$h1_content_in_index"'<\/title>/' "$output_directory/html/index.html"
 
+# Finish tags file
+cat "$output_directory/head.tags.html" > "$output_directory/html/tags.html"
+cat "$output_directory/tags.html" >> "$output_directory/html/tags.html"
+cat "$output_directory/tail.html" >> "$output_directory/html/tags.html"
+
 # Clean everything
 rm -f "$tmp_result_filenames"
 rm -f "$tmp_all_filenames_reversed"
-rm -f "$output_directory/"{"head","tail"}*.html
+rm -f "$output_directory/"{"head","tail","tags"}*.html

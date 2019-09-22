@@ -1,1 +1,53 @@
-TODO
+<noscript>
+	<p style="color: #a42">Tag display/search does not work without javascript.</p>
+</noscript>
+
+<h1 id="heading">Tags</h1>
+<div id="taglist">
+
+</div>
+
+<div class="bottom-nav">
+	<a class="a-home" href="index.html">Home</a>
+</div>
+
+<script>
+window.onload = function () {
+	// Load all tags and display them. Filter by tags
+	// based on query parameter.
+
+	// Load query string
+	// https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+	var div = document.getElementById("taglist");
+	var urlParams;
+	(window.onpopstate = function () {
+	    var match,
+		pl     = /\+/g,  // Regex for replacing addition symbol with a space
+		search = /([^&=]+)=?([^&]*)/g,
+		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+		query  = window.location.search.substring(1);
+
+	    urlParams = {};
+	    while (match = search.exec(query))
+	       urlParams[decode(match[1])] = decode(match[2]);
+	})();
+
+	// Display tags
+	if(!("tag" in urlParams)) {
+		for(var index in tag_keys_ordered) {
+			var tag_key = tag_keys_ordered[index];
+			div.innerHTML += "<p><a href=\"tags.html?tag=" + tag_key + "\">" + tag_key + "</a> (" + tags[tag_key].length + ")</p>";
+		}
+	}
+	// Display one tag
+	else {
+		var tag = urlParams["tag"];
+		div.innerHTML += "<a style=\"float: right\" href=\"tags.html\">Unfilter</a>";
+		div.innerHTML += "<h2>" + tag + " (" + tags[tag].length + ")</h2>";
+		for(var index in tags[tag]) {
+			div.innerHTML += "<p><a href=\"" + tags[tag][index].name + "\">" + tags[tag][index].heading + " (" + tags[tag][index].wordcount + ")</a></p>";
+			div.innerHTML += "<div class='index-summary'><p class='index-entry-summary'>" + tags[tag][index].description + "</p></div>"
+		}
+	}
+}
+</script>

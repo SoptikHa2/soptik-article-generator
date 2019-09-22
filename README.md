@@ -54,7 +54,7 @@ The first thing Soptik does is copying preset files into output directory. You c
 - `tail.index.html` is contents of `index.html` after article list - for example link to tag list or the annoying cookies stripe.
 - `tail.html` is essentially just HTML that closes `body` and `html` tags, but you can put your favorite cookies notification here instead.
 - `base.css` defines dimensions and position of various elements on site, and imports by default `base-dark.css`, which provides colors. You can edit `base.css` to instead link to `base-light.css` for white theme, or make your own one.
-- `head.tags.html` and `tail.tags.html` is exactly what you would expect.
+- `tags.html` and `head.tags.html` is tag list. It's used to display list of tags and filter articles based on selected tag.
 
 Please note that there is a special javascript file: `tags.js`. You can override it, but please don't, unless you know what you're doing. This file allows filtering tags. So when you click on tag name, it displays you only articles with specified tag name, and not all of them. This is the only place where we use javascript by default, and it's unfortunately required for the correct functionality.
 
