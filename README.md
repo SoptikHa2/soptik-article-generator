@@ -1,9 +1,21 @@
 # Soptik
 *The ultimate static HTML webpage generator.*
 
+## Usage
+
+```
+./compile.sh <directory_with_md_files> [output_directory] [--no-tags]
+```
+
+## What is this?
+
 Soptik is yet another simple webpage generator, build to learn awk.
 This generator uses standart tools found on every Linux machine, without
-the need to download everything else. Just \*sh scripts and awk (requires 'gawk').
+the need to download everything else. It's just \*sh script and awk (requires 'gawk').
+
+And it's pretty fast as well! On my computer, 23 files, with total of 22975 words (or 192K) were processed in under a second (0,57s)!
+
+# Source files structure
 
 Everything is compiled from markdown files, which are anotated to help awk with processing.
 Supported markdown file looks like this:
@@ -44,9 +56,9 @@ rest are tags. *Soptik* generates list of tags, so tags are clickable and one ca
 Second line is heading, which gets formated differently than anything else in the article.
 Third line (which can be empty) is summary paragraph, which is shown at index page.
 
-Please note that the order in which the articles are processed (the previous-next links and the index file content) is the default alphabetical one, but reversed. This way, if you name article files with datetime (such as `2019-09-16.md`), you'll get them sorted at the index page, from the newest one to the oldest one. If you want different html filename (and url), specify it in metadata.
+Please note that the order in which the articles are processed (the previous-next links and the index file content) is the default alphabetical one, but reversed. This way, if you name article files with datetime (such as `2019-09-16.md`), you'll get them sorted at the index page, from the newest one to the oldest one. If you want different html filename (and url), specify it in metadata. Only files with `.md` extension are processed.
 
-## Special files and navigation
+# Special files and navigation
 The first thing Soptik does is copying preset files into output directory. You can provide your own files, which will override the default ones. You can see default files in `/resources`.
 
 - `head.html` is basic HTML <head>, it contains metadata and link to `base.css`.
