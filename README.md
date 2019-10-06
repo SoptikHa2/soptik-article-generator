@@ -58,6 +58,9 @@ Third line (which can be empty) is summary paragraph, which is shown at index pa
 
 Please note that the order in which the articles are processed (the previous-next links and the index file content) is the default alphabetical one, but reversed. This way, if you name article files with datetime (such as `2019-09-16.md`), you'll get them sorted at the index page, from the newest one to the oldest one. If you want different html filename (and url), specify it in metadata. Only files with `.md` extension are processed.
 
+# Support
+Firefox gets first-class support and is the primary browser I test in. However, output of this program is valid HTML with minimum JS (only used for search via tags), so it should work in every browser - including lynx. 
+
 # Special files and navigation
 The first thing Soptik does is copying preset files into output directory. You can provide your own files, which will override the default ones. You can see default files in `/resources`.
 
