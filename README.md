@@ -23,7 +23,7 @@ Supported markdown file looks like this:
 ````markdown
 [ building-soptik-page-generator, 2019-08-09, soptik, markdown, awk ]
 How I built the Soptik page generator
-This is summary paragraph. How I built the Soptik page generator, what I used and how it works.
+This is summary paragraph, or *perex*. How I built the Soptik page generator, what I used and how it works.
 
 Everything began in *2019*, when I decided to build **the best** editor out there. With help
 from [this wonderful guide](https://developer.ibm.com/tutorials/l-awk1/) (beware, there are
