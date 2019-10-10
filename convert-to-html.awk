@@ -66,7 +66,7 @@ NR > 2 {
 		}
 
 		if ( text ~ /\[[^\]]*\]\([^\)]*\)/ ) { # Link
-			text=gensub(/\[([^\]]*)\]\(([^\)]*)\)/, "<a target=\"_blank\" href=\"\\2\">\\1</a>", "g", text)
+			text=gensub(/\[([^\]]*)\]\(([^\)]*)\)/, "<a href=\"\\2\">\\1</a>", "g", text)
 		}
 		if ( text ~ /`[^`\n]+`/ ) { # Inline code
 			text=gensub(/`([^\`]+)`/, "<code>\\1</code>", "g", text)
