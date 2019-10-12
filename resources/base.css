@@ -22,6 +22,9 @@ a, a:visited {
 a:hover {
 	text-decoration: underline;
 }
+img {
+	max-width: 80%;
+}
 
 .bottom-nav {
 	width: 100%;
