@@ -1,6 +1,8 @@
 # Soptik
 *The ultimate static HTML webpage generator.*
 
+[Live example](http://157.230.17.105/articles/)
+
 ## Usage
 
 ```
