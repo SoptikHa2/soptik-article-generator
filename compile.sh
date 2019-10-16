@@ -146,3 +146,7 @@ cat "$output_directory/tail.html" >> "$output_directory/html/tags.html"
 rm -f "$tmp_result_filenames"
 rm -f "$tmp_all_filenames_reversed"
 rm -f "$output_directory/"{"head","tail","tags"}*.html
+
+# Move everything out of inner /html directory
+mv "$output_directory/html/"* "$output_directory/" 2>/dev/null || true
+rm -rf "$output_directory/html"
