@@ -41,8 +41,8 @@ NR > 2 {
 	enclose_in_p=1 # Should the final text be enclosed in <p>?
 
 	# First of all, remove html tags. Maybe add whitelist later?
-	sub("<", "< ", text)
-	sub(">", " >", text)
+	text=gensub("<", "[", "g", text)
+	text=gensub(">", "]", "g", text)
 	
 	if ( text ~ /^[ ]*`{3,}[ ]*$/ ) { # Code block
 		if ( is_inside_code_block == 0 ) {
@@ -65,19 +65,19 @@ NR > 2 {
 			enclose_in_p=0
 		}
 
-		if ( text ~ /{[^}]*}\([^\)]*\)/ ) { # Image
+		if ( text ~ /((\\\\)|[^\\]|^){[^}]*}\([^\)]*\)/ ) { # Image
 			text=gensub(/{([^}]*)}\(([^\)]*)\)/, "<img src=\"\\2\" alt=\"\\1\" />", "g", text) 
 		}
-		if ( text ~ /\[[^\]]*\]\([^\)]*\)/ ) { # Link
+		if ( text ~ /((\\\\)|[^\\]|^)\[[^\]]*\]\([^\)]*\)/ ) { # Link
 			text=gensub(/\[([^\]]*)\]\(([^\)]*)\)/, "<a href=\"\\2\">\\1</a>", "g", text)
 		}
-		if ( text ~ /`[^`\n]+`/ ) { # Inline code
+		if ( text ~ /((\\\\)|[^\\]|^)`[^`\n]+`/ ) { # Inline code
 			text=gensub(/`([^\`]+)`/, "<code>\\1</code>", "g", text)
 		}
-		if ( text ~ /\*\*.*\*\*/ ) { # Bold text
+		if ( text ~ /((\\\\)|[^\\]|^)\*{2}.*\*{2}/ ) { # Bold text
 			text=gensub(/\*\*([^(\*\*)]+)\*\*/, "<b>\\1</b>", "g", text)
 		}
-		if ( text ~ /\*.*\*/ ) { # Italics
+		if ( text ~ /((\\\\)|[^\\]|^)\*.*\*/ ) { # Italics
 			text=gensub(/\*([^\*]+)\*/, "<i>\\1</i>", "g", text)
 		}
 		
@@ -88,11 +88,10 @@ NR > 2 {
 		if ( text ~ /^[ ]*>/ ) { # Quote
 			text= "<q>" text "</q>"
 		}
-#		if ( text ~ /^[ ]*$/ ) { # Empty line LOOKS BAD
-#			text="<br />"
-#			enclose_in_p=0
-#		}
 	}
+
+	# Process escaped backslashes (\\ => \)
+	text=gensub("\\\\", "\\", "g"more, text)
 
 	if ( enclose_in_p == 1 && is_inside_code_block == 0 ) {
 		print "<p>" text "</p>"
