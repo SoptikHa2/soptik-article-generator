@@ -28,6 +28,13 @@ output_directory="outputDirectory"
 
 
 
+#┌────────────┐
+#│ INITIALIZE │
+#└────────────┘
+# This gets incremented as we process markdown files
+total_number_of_words=0
+start_time=$(date +%s.%N)
+
 
 
 #┌─────────────┐
@@ -104,6 +111,7 @@ for filename in $(cat "$tmp_all_filenames_reversed"); do
 	number_of_words=$(wc -w "$filename" | cut -d" " -f1)
 	heading=$(sed -n 2p "$filename")
 	summary=$(sed -n 3p "$filename")
+	total_number_of_words=$((number_of_words+total_number_of_words))
 
 	# Generate .html file from it
 	if [[ $counter -gt 1 ]]; then
@@ -149,3 +157,15 @@ rm -f "$output_directory/"{"head","tail","tags"}*.html
 # Move everything out of inner /html directory
 mv "$output_directory/html/"* "$output_directory/" 2>/dev/null || true
 rm -rf "$output_directory/html"
+
+
+#┌─────┐
+#│ END │
+#└─────┘
+# Print nice statistics to stderr
+COLOR_GREEN='\033[0;32m'
+COLOR_CLEAR='\033[0m'
+end_time=$(date +%s.%N)
+process_time=$(bc <<< "$end_time - $start_time")
+# We need to set LC_NUMERIC to american, so deciaml comma isn't used - bc uses decimal point
+LC_NUMERIC="en_US.UTF-8" >&2 printf "Processed $COLOR_GREEN%d$COLOR_CLEAR words in $COLOR_GREEN%0.2f$COLOR_CLEAR seconds\n" $total_number_of_words "$process_time"
