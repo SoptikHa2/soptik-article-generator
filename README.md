@@ -1,7 +1,8 @@
 # Soptik
 *The ultimate static HTML webpage generator.*
 
-[Live example](http://157.230.17.105/articles/)
+## Instalation
+Clone this git repository. Run `compile.sh`. Make sure to have installed `gawk` (not just `awk`) and `bc`.
 
 ## Usage
 
