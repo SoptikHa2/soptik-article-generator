@@ -1,8 +1,5 @@
 @import url('base-light.css'); /* Import colors */
-
-@media (prefers-color-scheme: dark) {
-	@import url('base-dark.css');
-}
+@import url('base-dark.css') (prefers-color-scheme: dark); /* Dark if user wants to */
 
 body {
 	margin: 40px auto;
