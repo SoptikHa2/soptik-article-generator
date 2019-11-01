@@ -34,6 +34,9 @@ Everything began in *2019*, when I decided to build **the best** editor out ther
 from [this wonderful guide](https://developer.ibm.com/tutorials/l-awk1/) (beware, there are
 other parts, just not linked - edit URL to get there), I was able to make it work!
 
+Even images are supported.
+{image of video in firefox i3}(https://raw.githubusercontent.com/SoptikHa2/archlinux-dotfiles/master/screenshots/firefox-video-fullscreen-in-window.png)
+
 # Code
 
 ```
