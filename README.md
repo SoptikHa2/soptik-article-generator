@@ -18,6 +18,8 @@ the need to download everything else. It's just \*sh script and awk (requires 'g
 
 And it's pretty fast as well. On my computer, 23 files, with total of 22975 words (or 192K) were processed in under a second (0,57s)!
 
+You can see live example at [soptik.tech](https://soptik.tech/articles).
+
 # Source files structure
 
 Everything is compiled from markdown files, which are anotated to help awk with processing.
