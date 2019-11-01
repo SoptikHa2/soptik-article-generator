@@ -31,7 +31,7 @@ END {
 		print "<div class='index-summary'>"
 			print "<p class='index-entry-summary'>"summary"</h2>"
 		print "</div>"
-		print "<a class='index-click-more-label' href='"address"'>("number_of_words")</a>"
+		print "<a class='index-click-more-label' href='"address"'>("number_of_words" words)</a>"
 	print "</div>"
 	print "<hr />"
 }
