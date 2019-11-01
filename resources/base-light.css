@@ -10,3 +10,6 @@ pre, code {
 a, a:visited {
 	color: #208c0f;
 }
+h1 a, h1 a:visited {
+	color: #444;
+}
