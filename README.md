@@ -18,6 +18,8 @@ the need to download everything else. It's just \*sh script and awk (requires 'g
 
 And it's pretty fast as well. On my computer, 23 files, with total of 22975 words (or 192K) were processed in under a second (0,57s)!
 
+You can see live example at [soptik.tech](https://soptik.tech/articles).
+
 # Source files structure
 
 Everything is compiled from markdown files, which are anotated to help awk with processing.
@@ -31,6 +33,9 @@ This is summary paragraph, or *perex*. How I built the Soptik page generator, wh
 Everything began in *2019*, when I decided to build **the best** editor out there. With help
 from [this wonderful guide](https://developer.ibm.com/tutorials/l-awk1/) (beware, there are
 other parts, just not linked - edit URL to get there), I was able to make it work!
+
+Even images are supported.
+{image of video in firefox i3}(https://raw.githubusercontent.com/SoptikHa2/archlinux-dotfiles/master/screenshots/firefox-video-fullscreen-in-window.png)
 
 # Code
 
