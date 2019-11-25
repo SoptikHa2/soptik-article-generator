@@ -25,6 +25,11 @@ a:hover {
 img {
 	max-width: 80%;
 }
+q {
+	padding-left: 1em;
+	display: block;
+	border-left: 2px solid gray;
+}
 
 .bottom-nav {
 	width: 100%;

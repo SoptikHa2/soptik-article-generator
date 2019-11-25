@@ -39,10 +39,6 @@ NR > 2 {
 	# Text content
 	text=$0 # The final text to render
 	enclose_in_p=1 # Should the final text be enclosed in <p>?
-
-	# First of all, remove html tags. Maybe add whitelist later?
-	text=gensub("<", "[", "g", text)
-	text=gensub(">", "]", "g", text)
 	
 	if ( text ~ /^[ ]*`{3,}[ ]*$/ ) { # Code block
 		if ( is_inside_code_block == 0 ) {
