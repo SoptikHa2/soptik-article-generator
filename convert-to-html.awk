@@ -2,6 +2,10 @@ BEGIN 	{
 	print "<article>"
 	FS=","
 	is_inside_code_block=0
+
+	syntax_highlighting__langname=""
+	syntax_highlighting__contents=""
+	syntax_highlighting__command="python3 ./syntax-highlighter.py"
 }
 
 NR == 1 {
@@ -40,14 +44,29 @@ NR > 2 {
 	text=$0 # The final text to render
 	enclose_in_p=1 # Should the final text be enclosed in <p>?
 	
-	if ( text ~ /^[ ]*`{3,}[ ]*$/ ) { # Code block
+	if ( text ~ /^[ ]*`{3,}[A-Za-z]*[ ]*$/ ) { # Code block
 		if ( is_inside_code_block == 0 ) {
-			text= "<p><pre>" 
+			#text= "<p><pre>" 
 			is_inside_code_block = 1
-		}else{
-			text= "</pre></p>"
+			match($0,/^[ ]*`{3,}([A-Za-z]*)[ ]*$/,__syntaxlangarray)
+			syntax_highlighting__langname = __syntaxlangarray[1]
+			text = ""
+		} else {
+			# Highlight text in buffer and print it
+			highlighted_command = syntax_highlighting__command " '" syntax_highlighting__contents "' " syntax_highlighting__langname
+			text=""
+			while ( ( highlighted_command | getline result ) > 0 ) {
+				text = text result
+			}
+			close(highlighted_command)
 			is_inside_code_block = 0
 		}
+	}
+	else if ( is_inside_code_block == 1 ) {
+		# If inside code block, don't print or do anything,
+		# just store text into buffer
+		syntax_highlighting__contents = syntax_highlighting__contents text "\r"
+		text = ""
 	}
 	else	{
 		if ( text ~ /^#[^#]/ ) { # Heading
