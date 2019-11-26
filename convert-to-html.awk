@@ -46,7 +46,6 @@ NR > 2 {
 	
 	if ( text ~ /^[ ]*`{3,}[A-Za-z]*[ ]*$/ ) { # Code block
 		if ( is_inside_code_block == 0 ) {
-			#text= "<p><pre>" 
 			is_inside_code_block = 1
 			match($0,/^[ ]*`{3,}([A-Za-z]*)[ ]*$/,__syntaxlangarray)
 			syntax_highlighting__langname = __syntaxlangarray[1]
@@ -55,8 +54,16 @@ NR > 2 {
 			# Highlight text in buffer and print it
 			highlighted_command = syntax_highlighting__command " '" syntax_highlighting__contents "' " syntax_highlighting__langname
 			text=""
+			# Check if we got at least some input from script that highlights
+			# If not, return the buffer unformatted (just in <p><pre>) and warn user.
+			syntax_highligter_worked=0
 			while ( ( highlighted_command | getline result ) > 0 ) {
 				text = text result
+				syntax_highligter_worked=1
+			}
+			if(syntax_highlighter_wored == 0) {
+				text = "<p><pre>" syntax_highlighting__contents "</pre></p>"
+				print "Warning: syntax highlighting failed, make sure that python3 is installed correctly." > "/dev/stderr"
 			}
 			close(highlighted_command)
 			is_inside_code_block = 0
