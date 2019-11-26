@@ -1,5 +1,6 @@
 @import url('base-light.css'); /* Import colors */
 @import url('base-dark.css') (prefers-color-scheme: dark); /* Dark if user wants to */
+@import url('syntax-highlighting-light.css'); /* Import syntax highlighting colors */
 
 body {
 	margin: 40px auto;
@@ -15,6 +16,8 @@ h1, h2, h3 {
 pre, code {
 	font-family: "Courier New", Courier, monospace;
 	padding: 2px;
+	max-width: 650px;
+	overflow-x: auto;
 }
 a, a:visited {
 	text-decoration: none;
