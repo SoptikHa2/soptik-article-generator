@@ -71,9 +71,10 @@ done
 mkdir -p "$output_directory/html/css"
 mkdir -p "$output_directory/html/js"
 
-# Copy default index, head, tail, css.
+# Copy default index, head, tail, css, js.
 cp "resources/"{"head","tail"}*.html "$output_directory"
 cp "resources/"*.css "$output_directory/html/css"
+cp "resources/"*.js "$output_directory/html/js"
 cp "resources/tags.html" "$output_directory/tags.html"
 
 # Copy user-provided head, tail, html, css and js - if any
