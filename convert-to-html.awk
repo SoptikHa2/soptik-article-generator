@@ -37,7 +37,7 @@ NR == 2 {
 			print "<div class='article-tag'><a href='tags.html?tag=" tags[tag] "'>" tags[tag] "</a></div>"
 		}
 	print "</div>"
-	print "<p class='article-date'>Written on " written_date ".</p>"
+	print "<p class='article-date'>Written on <time>" written_date "</time>.</p>"
 }
 
 NR > 2 {
@@ -64,14 +64,14 @@ NR > 2 {
 					syntax_highligter_worked=1
 				}
 				if(syntax_highlighter_wored == 0) {
-					text = "<p><pre>" syntax_highlighting__contents "</pre></p>"
+					text = "<pre>" syntax_highlighting__contents "</pre>"
 					print "Warning: syntax highlighting failed, make sure that python3 is installed correctly." > "/dev/stderr"
 				}
 				close(highlighted_command)
 				is_inside_code_block = 0
 				syntax_highlighting__contents = ""
 			} else {
-				text = "<p><pre>" syntax_highlighting__contents "</pre></p>"
+				text = "<pre>" syntax_highlighting__contents "</pre>"
 				is_inside_code_block = 0
 				syntax_highlighting__contents = ""
 			}
