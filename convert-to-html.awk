@@ -135,7 +135,8 @@ END	{
 	if (previous_filename ~ ".+\\.html$") {
 		print "<a class='a-prev' href='" previous_filename "'>Previous</a>"
 	}
-	print "<a class='a-home' href='index.html'>Home</a>"
+	print "<a class='a-home' href='index.html'>Index</a>"
+	print "<a class='a-home' href='/'>Home</a>"
 	if (next_filename ~ ".+\\.html$") {
 		print "<a class='a-next' href='" next_filename "'>Next</a>"
 	}
