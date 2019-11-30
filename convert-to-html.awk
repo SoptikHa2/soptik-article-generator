@@ -69,9 +69,11 @@ NR > 2 {
 				}
 				close(highlighted_command)
 				is_inside_code_block = 0
+				syntax_highlighting__contents = ""
 			} else {
 				text = "<p><pre>" syntax_highlighting__contents "</pre></p>"
 				is_inside_code_block = 0
+				syntax_highlighting__contents = ""
 			}
 		}
 	}
