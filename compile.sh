@@ -127,8 +127,8 @@ for filename in $(cat "$tmp_all_filenames_reversed"); do
 	# And change .html file <title>
 	sed -i 's/<title>.*<\/title>/<title>'"$heading"'<\/title>/' "$output_directory/html/$newname_without_extension.html"
 
-	# If it doesn't start with --no-index, add to to general+tags index
-	if [[ "$filename" = "--no-index"* ]];
+	# If it doesn't contain --no-index, add to to general+tags index
+	if [[ "$filename" = *"--no-index"* ]];
 	then
 		echo "Didn't index file $next_filename.html"
 	else
