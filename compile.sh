@@ -127,12 +127,18 @@ for filename in $(cat "$tmp_all_filenames_reversed"); do
 	# And change .html file <title>
 	sed -i 's/<title>.*<\/title>/<title>'"$heading"'<\/title>/' "$output_directory/html/$newname_without_extension.html"
 
-	# Add it into index
-	gawk -f convert-to-index-entry.awk -v number_of_words="$number_of_words" -v heading="$heading" -v summary="$summary" -v address="$newname_without_extension.html" -- "$filename" >> "$output_directory/html/index.html"
+	# If it doesn't start with --no-index, add to to general+tags index
+	if [[ "$filename" = "--no-index"* ]];
+	then
+		echo "Didn't index file $next_filename.html"
+	else
+		# Add it into index
+		gawk -f convert-to-index-entry.awk -v number_of_words="$number_of_words" -v heading="$heading" -v summary="$summary" -v address="$newname_without_extension.html" -- "$filename" >> "$output_directory/html/index.html"
 
-	# Add all its tags into tags temp file
-	if [[ "$do_generate_tags" == "true" ]]; then
-		gawk -f extract-tags.awk -v filename="$newname_without_extension.html" -v heading="$heading" -v description="$summary" -v wordcount="$number_of_words"  -- "$filename" >> "$output_directory/html/js/tags.js"
+		# Add all its tags into tags temp file
+		if [[ "$do_generate_tags" == "true" ]]; then
+			gawk -f extract-tags.awk -v filename="$newname_without_extension.html" -v heading="$heading" -v description="$summary" -v wordcount="$number_of_words"  -- "$filename" >> "$output_directory/html/js/tags.js"
+		fi
 	fi
 
 	counter=$((counter+1))
