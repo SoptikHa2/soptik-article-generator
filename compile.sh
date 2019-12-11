@@ -130,7 +130,7 @@ for filename in $(cat "$tmp_all_filenames_reversed"); do
 	# If it doesn't contain --no-index, add to to general+tags index
 	if [[ "$filename" = *"--no-index"* ]];
 	then
-		echo "Didn't index file $next_filename.html"
+		echo "Didn't index file $newname_without_extension.html"
 	else
 		# Add it into index
 		gawk -f convert-to-index-entry.awk -v number_of_words="$number_of_words" -v heading="$heading" -v summary="$summary" -v address="$newname_without_extension.html" -- "$filename" >> "$output_directory/html/index.html"
