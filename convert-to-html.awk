@@ -10,9 +10,6 @@ BEGIN 	{
 }
 
 NR == 1 {
-	# Tags
-	print "<div class=\"tags\">"
-	
 	x=1
 	arrayidx=0
 	while ( x<=NF ) {
@@ -26,7 +23,6 @@ NR == 1 {
 		}
 		x++
 	}
-	print "</div>"
 }
 
 NR == 2 {
@@ -140,5 +136,5 @@ END	{
 	if (next_filename ~ ".+\\.html$") {
 		print "<a class='a-next' href='" next_filename "'>Next</a>"
 	}
-	print "</article>"
+	print "</div></article>"
 }
