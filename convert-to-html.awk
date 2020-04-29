@@ -106,6 +106,9 @@ NR > 2 {
 		if ( text ~ /((\\\\)|[^\\]|^)\*.*\*/ ) { # Italics
 			text=gensub(/\*([^\*]+)\*/, "<i>\\1</i>", "g", text)
 		}
+		if ( text ~ /((\\\\)|[^\\]|^)~~.*~~/ ) { # Strikethrough
+			text=gensub(/~~([^\*]+)~~/, "<del>\\1</del>", "g", text)
+		}
 		
 		if ( text ~ /^[ ]*-{3,}[ ]*$/ ) { # Line
 			text="<hr />"
