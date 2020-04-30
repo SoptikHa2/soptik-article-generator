@@ -139,5 +139,8 @@ END	{
 	if (next_filename ~ ".+\\.html$") {
 		print "<a class='a-next' href='" next_filename "'>Next</a>"
 	}
-	print "</div></article>"
+	print "</div>"
+    print "<div class='bottom-nav'>"
+    print "<a class='a-home' href='rss.xml'>RSS feed</a>"
+    print "</div></article>"
 }
