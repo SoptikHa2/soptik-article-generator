@@ -3,8 +3,11 @@ body {
 	background-color: #222;
 }
 pre, code {
-	background-color: #222;
-	color: #eee;
+    border: 1px solid black;
+    color: #eee;
+}
+code { 
+    border: 1px solid #444;
 }
 a, a:visited {
 	color: #98ce90;
