@@ -138,7 +138,9 @@ for filename in $(cat "$tmp_all_filenames_reversed"); do
 		# Add it into index
 		gawk -f convert-to-index-entry.awk -v number_of_words="$number_of_words" -v heading="$heading" -v summary="$summary" -v address="$newname_without_extension.html" -- "$filename" >> "$output_directory/html/index.html"
         # And to rss file
-        gawk -f convert-to-rss-entry.awk -v heading="$heading" -v summary="$summary" -v address="$newname_without_extension.html" -- "$filename" >> "$output_directory/html/rss.xml"
+        rfcdate=$(awk -f extract-date.awk -- "$filename")
+        rfcdate=$(date -R --date="$rfcdate")
+        gawk -f convert-to-rss-entry.awk -v heading="$heading" -v summary="$summary" -v address="$newname_without_extension.html" -v date="$rfcdate" -- "$filename" >> "$output_directory/html/rss.xml"
 
 		# Add all its tags into tags temp file
 		if [[ "$do_generate_tags" == "true" ]]; then

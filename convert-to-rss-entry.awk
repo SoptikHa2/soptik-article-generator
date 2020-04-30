@@ -7,7 +7,7 @@ NR == 1 {
 	while ( _x<=NF ) {
 		gsub(/[ \[\]]+/,"",$_x) # Delete all [, ], [:space:]
 		if ( _x == 2 ) {
-			date=$_x
+            # Date - ignore. We receive $date from user in correct format
 		} else if ( _x > 2 ) {
 			tags[_arraylen++]=$_x
 		}
