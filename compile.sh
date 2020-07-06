@@ -14,6 +14,12 @@
 # 0 => Ok
 # 99 => Configuration error
 # (other) => Error while generating. Verify correct *md files structure.
+#
+# Dependencies:
+# - bash
+# - sed
+# - gawk (GNU awk)
+# - python3 + pygments (optional: syntax highlighting)
 
 
 # Exit on any error
@@ -129,6 +135,13 @@ for filename in $(cat "$tmp_all_filenames_reversed"); do
 	cat "$output_directory/tail.html" >> "$output_directory/html/$newname_without_extension.html"
 	# And change .html file <title>
 	sed -i 's/<title>.*<\/title>/<title>'"$heading"'<\/title>/' "$output_directory/html/$newname_without_extension.html"
+	# And try to syntax-highlight the resulting html file. This might fail if user didn't install python and pygments, but we don't care.
+	gawk -f "$SCRIPTPATH/highlight-html.awk" -- "$output_directory/html/$newname_without_extension.html" > "$output_directory/html/$newname_without_extension.html.highlighted"
+	if [ "$(wc -l "$output_directory/html/$newname_without_extension.html.highlighted" | cut -d' ' -f1)" -ge 1 ]; then
+		mv "$output_directory"/html/"$newname_without_extension".html{.highlighted,}
+	else
+		rm "$output_directory/html/$newname_without_extension.html.highlighted"
+	fi
 
 	# If it doesn't contain --no-index, add to to general+tags index
 	if [[ "$filename" = *"--no-index"* ]];
