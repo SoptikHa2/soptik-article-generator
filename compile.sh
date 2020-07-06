@@ -25,8 +25,8 @@ do_generate_tags=true
 source_directory="."
 output_directory="outputDirectory"
 
-
-
+SCRIPT=$(readlink -f "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
 
 #┌────────────┐
 #│ INITIALIZE │
@@ -72,10 +72,10 @@ mkdir -p "$output_directory/html/css"
 mkdir -p "$output_directory/html/js"
 
 # Copy default index, head, tail, css, js.
-cp "resources/"{"head","tail"}*.html "$output_directory"
-cp "resources/"*.css "$output_directory/html/css"
-cp "resources/"*.js "$output_directory/html/js"
-cp "resources/tags.html" "$output_directory/tags.html"
+cp "$SCRIPTPATH/resources/"{"head","tail"}*.html "$output_directory"
+cp "$SCRIPTPATH/resources/"*.css "$output_directory/html/css"
+cp "$SCRIPTPATH/resources/"*.js "$output_directory/html/js"
+cp "$SCRIPTPATH/resources/tags.html" "$output_directory/tags.html"
 
 # Copy user-provided head, tail, html, css and js - if any
 cp {"$source_directory/head"*.html,"$source_directory/tail"*.html} "$output_directory" 2>/dev/null || true
@@ -122,7 +122,7 @@ for filename in $(cat "$tmp_all_filenames_reversed"); do
 	fi
 	previous_filename=$(sed -n $((counter+1))p "$tmp_result_filenames")
 	cat "$output_directory/head.html" > "$output_directory/html/$newname_without_extension.html"
-	gawk -f convert-to-html.awk -v previous_filename="$previous_filename.html" -v next_filename="$next_filename.html" -- "$filename" >> "$output_directory/html/$newname_without_extension.html"
+	gawk -f "$SCRIPTPATH/convert-to-html.awk" -v previous_filename="$previous_filename.html" -v next_filename="$next_filename.html" -- "$filename" >> "$output_directory/html/$newname_without_extension.html"
 	cat "$output_directory/tail.html" >> "$output_directory/html/$newname_without_extension.html"
 	# And change .html file <title>
 	sed -i 's/<title>.*<\/title>/<title>'"$heading"'<\/title>/' "$output_directory/html/$newname_without_extension.html"
@@ -133,11 +133,11 @@ for filename in $(cat "$tmp_all_filenames_reversed"); do
 		echo "Didn't index file $newname_without_extension.html"
 	else
 		# Add it into index
-		gawk -f convert-to-index-entry.awk -v number_of_words="$number_of_words" -v heading="$heading" -v summary="$summary" -v address="$newname_without_extension.html" -- "$filename" >> "$output_directory/html/index.html"
+		gawk -f "$SCRIPTPATH/convert-to-index-entry.awk" -v number_of_words="$number_of_words" -v heading="$heading" -v summary="$summary" -v address="$newname_without_extension.html" -- "$filename" >> "$output_directory/html/index.html"
 
 		# Add all its tags into tags temp file
 		if [[ "$do_generate_tags" == "true" ]]; then
-			gawk -f extract-tags.awk -v filename="$newname_without_extension.html" -v heading="$heading" -v description="$summary" -v wordcount="$number_of_words"  -- "$filename" >> "$output_directory/html/js/tags.js"
+			gawk -f "$SCRIPTPATH/extract-tags.awk" -v filename="$newname_without_extension.html" -v heading="$heading" -v description="$summary" -v wordcount="$number_of_words"  -- "$filename" >> "$output_directory/html/js/tags.js"
 		fi
 	fi
 
