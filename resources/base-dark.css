@@ -3,7 +3,7 @@ body {
 	background-color: #222;
 }
 pre, code {
-    color: #eee;
+    background: #272822; color: #f8f8f2 
 }
 code { 
     border: 1px solid #444;
