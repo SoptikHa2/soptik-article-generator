@@ -6,6 +6,9 @@
 # Second argument: language
 import sys
 
+def get_contents(filename):
+    with open(filename, 'r') as myfile:
+        return myfile.read()
 
 # Check for correct import and arguments passed to script
 try:
@@ -16,14 +19,15 @@ except ImportError:
     print('Error: Python3 library "pygments" not found. Syntax highlighting won\'t be used.', file=sys.stderr)
     # Print whatever we received as source code
     if len(sys.argv) >= 2:
-        print(sys.argv[1])
+        print(get_contents(sys.argv[1]))
     sys.exit()
 if len(sys.argv) < 3:
     print('Error: Expected source code and language name. Syntax highlighting won\'t be used.', file=sys.stderr)
     # Print whatever we received as source code
     if len(sys.argv) >= 2:
-        print(sys.argv[1])
+        print(get_contents(sys.argv[1]))
     sys.exit()
 
 lexer = get_lexer_by_name(sys.argv[2])
-print(highlight(sys.argv[1], lexer, HtmlFormatter(lineseparator="<br/>")))
+print(highlight(get_contents(sys.argv[1]), lexer, HtmlFormatter(lineseparator="<br/>")))
+
