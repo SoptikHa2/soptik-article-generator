@@ -8,7 +8,7 @@ inside_to_be_highlighted_code_block == 0 {
 }
 # When we reach end of highlighted code block, clear inside_to_be_highlighted_code_block flag and
 # print highlighted string
-/^<\/pre><\/p>$/ {
+/^<\/pre>$/ {
 	inside_to_be_highlighted_code_block=0
 	# Print highlighted string
 	{
@@ -35,7 +35,7 @@ inside_to_be_highlighted_code_block == 1 {
 	source_code_to_highlight = source_code_to_highlight $0 "\n"
 }
 # Wait until we see <pre> with langname, which means we should colorcode the following segment
-/^<p><pre langname='(.+)'>$/ {
+/^<pre langname='(.+)'>$/ {
 	inside_to_be_highlighted_code_block=1
-	langname=gensub(/^<p><pre langname='(.+)'>$/, "\\1", "g", $0)
+	langname=gensub(/^<pre langname='(.+)'>$/, "\\1", "g", $0)
 }
