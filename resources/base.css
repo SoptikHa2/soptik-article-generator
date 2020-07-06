@@ -1,6 +1,7 @@
 @import url('base-light.css'); /* Import colors */
 @import url('base-dark.css') (prefers-color-scheme: dark); /* Dark if user wants to */
 @import url('syntax-highlighting-light.css'); /* Import syntax highlighting colors */
+@import url('syntax-highlighting-dark.css') (prefers-color-scheme: dark); /* Dark syntax highlighting */
 
 body {
 	margin: 40px auto;
