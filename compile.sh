@@ -20,6 +20,12 @@
 set -eu
 # Extended globbing operators
 shopt -s extglob
+# Create subshell and move to the current script location, so we can use
+# relative paths. Things tend to break otherwise.
+SCRIPT=$(readlink -f "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+(
+cd "$SCRIPTPATH"
 
 do_generate_tags=true
 source_directory="."
@@ -176,3 +182,4 @@ end_time=$(date +%s.%N)
 process_time=$(bc <<< "$end_time - $start_time")
 # We need to set LC_NUMERIC to american, so deciaml comma isn't used - bc uses decimal point
 LC_NUMERIC="en_US.UTF-8" >&2 printf "Processed $COLOR_GREEN%'d$COLOR_CLEAR words in $COLOR_GREEN%0.2f$COLOR_CLEAR seconds\n" $total_number_of_words "$process_time"
+)
