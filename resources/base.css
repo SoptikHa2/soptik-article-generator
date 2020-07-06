@@ -19,6 +19,9 @@ pre, code {
 	max-width: 650px;
 	overflow-x: auto;
 }
+pre {
+    padding: 0.5em;
+}
 a, a:visited {
 	text-decoration: none;
 }

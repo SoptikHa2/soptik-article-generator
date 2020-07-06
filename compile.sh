@@ -73,12 +73,13 @@ mkdir -p "$output_directory/html/js"
 
 # Copy default index, head, tail, css, js.
 cp "$SCRIPTPATH/resources/"{"head","tail"}*.html "$output_directory"
+cp "$SCRIPTPATH/resources/"{"head","tail"}*.rss "$output_directory"
 cp "$SCRIPTPATH/resources/"*.css "$output_directory/html/css"
 cp "$SCRIPTPATH/resources/"*.js "$output_directory/html/js"
 cp "$SCRIPTPATH/resources/tags.html" "$output_directory/tags.html"
 
 # Copy user-provided head, tail, html, css and js - if any
-cp {"$source_directory/head"*.html,"$source_directory/tail"*.html} "$output_directory" 2>/dev/null || true
+cp {"$source_directory/head"*.{html,rss},"$source_directory/tail"*.{html,rss}} "$output_directory" 2>/dev/null || true
 cp "$source_directory/"*.css "$output_directory/html/css" 2>/dev/null || true
 cp "$source_directory/"*.js "$output_directory/html/js" 2>/dev/null || true
 cp "$source_directory/"*.html "$output_directory/html" 2>/dev/null || true
@@ -86,6 +87,8 @@ cp "$source_directory/tags.html" "$output_directory/tags.html" 2>/dev/null || tr
 # Prepare index file
 cat "$output_directory/head.html" > "$output_directory/html/index.html"
 cat "$output_directory/head.index.html" >> "$output_directory/html/index.html"
+# Prepare rss file
+cat "$output_directory/head.rss" > "$output_directory/html/rss.xml"
 
 # Remove old tags.js if any
 rm -f "$output_directory/html/js/tags.js" 2>/dev/null || true
@@ -134,6 +137,10 @@ for filename in $(cat "$tmp_all_filenames_reversed"); do
 	else
 		# Add it into index
 		gawk -f "$SCRIPTPATH/convert-to-index-entry.awk" -v number_of_words="$number_of_words" -v heading="$heading" -v summary="$summary" -v address="$newname_without_extension.html" -- "$filename" >> "$output_directory/html/index.html"
+		# And to rss file
+		rfcdate=$(gawk -f "$SCRIPTPATH/extract-date.awk" -- "$filename")
+		rfcdate=$(date -R --date="$rfcdate")
+		gawk -f "$SCRIPTPATH/convert-to-rss-entry.awk" -v heading="$heading" -v summary="$summary" -v address="$newname_without_extension.html" -v date="$rfcdate" -- "$filename" >> "$output_directory/html/rss.xml"
 
 		# Add all its tags into tags temp file
 		if [[ "$do_generate_tags" == "true" ]]; then
@@ -150,6 +157,9 @@ cat "$output_directory/tail.html" >> "$output_directory/html/index.html"
 # Index title will be the same as <h1> content in index
 h1_content_in_index=$(grep -e '<h1>.*</h1>' "$output_directory/html/index.html" | sed 's/<[^<]*>//g' | sed 's/^ *\t*//' | sed 's/ *\t*$//' | head -1)
 sed -i 's/<title>.*<\/title>/<title>'"$h1_content_in_index"'<\/title>/' "$output_directory/html/index.html"
+
+# Finish rss file
+cat "$output_directory/tail.rss" >> "$output_directory/html/rss.xml"
 
 # Finish tags file
 cat "$output_directory/head.tags.html" > "$output_directory/html/tags.html"

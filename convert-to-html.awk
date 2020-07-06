@@ -7,9 +7,6 @@ BEGIN 	{
 }
 
 NR == 1 {
-	# Tags
-	print "<div class=\"tags\">"
-	
 	x=1
 	arrayidx=0
 	while ( x<=NF ) {
@@ -23,7 +20,6 @@ NR == 1 {
 		}
 		x++
 	}
-	print "</div>"
 }
 
 NR == 2 {
@@ -87,6 +83,9 @@ NR > 2 {
 		if ( text ~ /((\\\\)|[^\\]|^)\*.*\*/ ) { # Italics
 			text=gensub(/\*([^\*]+)\*/, "<i>\\1</i>", "g", text)
 		}
+		if ( text ~ /((\\\\)|[^\\]|^)~~.*~~/ ) { # Strikethrough
+			text=gensub(/~~([^\*]+)~~/, "<del>\\1</del>", "g", text)
+		}
 		
 		if ( text ~ /^[ ]*-{3,}[ ]*$/ ) { # Line
 			text="<hr />"
@@ -117,5 +116,8 @@ END	{
 	if (next_filename ~ ".+\\.html$") {
 		print "<a class='a-next' href='" next_filename "'>Next</a>"
 	}
-	print "</article>"
+	print "</div>"
+    print "<div class='bottom-nav'>"
+    print "<a class='a-home' href='rss.xml'>RSS feed</a>"
+    print "</div></article>"
 }
