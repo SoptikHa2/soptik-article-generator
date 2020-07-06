@@ -27,14 +27,14 @@ BEGIN {
 }
 # If we are processing normal text, print it
 inside_to_be_highlighted_code_block == 0 {
-	print $0
+	print gensub(/<\/?pre.*>/, "", "g", $0)
 }
 # If we are inside highlighted block, add it into source code to highlight
 inside_to_be_highlighted_code_block == 1 {
 	source_code_to_highlight = source_code_to_highlight $0 "\n"
 }
 # Wait until we see <pre> with langname, which means we should colorcode the following segment
-/^<pre langname='(.+)'>$/ {
+/^<pre langname='(.*)'>$/ {
 	inside_to_be_highlighted_code_block=1
 	langname=gensub(/^<pre langname='(.+)'>$/, "\\1", "g", $0)
 }
