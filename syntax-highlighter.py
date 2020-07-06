@@ -28,6 +28,9 @@ if len(sys.argv) < 3:
         print(get_contents(sys.argv[1]))
     sys.exit()
 
-lexer = get_lexer_by_name(sys.argv[2])
-print(highlight(get_contents(sys.argv[1]), lexer, HtmlFormatter(lineseparator="<br/>")))
+try:
+    lexer = get_lexer_by_name(sys.argv[2])
+    print(highlight(get_contents(sys.argv[1]), lexer, HtmlFormatter(lineseparator="<br/>")))
+except:
+    print(get_contents(sys.argv[1]))
 

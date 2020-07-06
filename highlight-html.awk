@@ -2,10 +2,6 @@ BEGIN {
 	inside_to_be_highlighted_code_block = 0
 	srand()
 }
-# If we are processing normal text, print it
-inside_to_be_highlighted_code_block == 0 {
-	print $0
-}
 # When we reach end of highlighted code block, clear inside_to_be_highlighted_code_block flag and
 # print highlighted string
 /^<\/pre>$/ {
@@ -28,6 +24,9 @@ inside_to_be_highlighted_code_block == 0 {
 		# Remove the random filename
 		system("rm -- '" code_filename "'")
 	}
+}
+# If we are processing normal text, print it
+inside_to_be_highlighted_code_block == 0 {
 	print $0
 }
 # If we are inside highlighted block, add it into source code to highlight
