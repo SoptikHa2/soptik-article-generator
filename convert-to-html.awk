@@ -45,6 +45,7 @@ NR > 2 {
 			syntax_highlighting__langname = __syntaxlangarray[1]
 			text = ""
 		} else {
+			enclose_in_p=0
 			text = "<pre langname='" syntax_highlighting__langname "'>\n" syntax_highlighting__contents "</pre>"
 			is_inside_code_block = 0
 			syntax_highlighting__contents = ""
