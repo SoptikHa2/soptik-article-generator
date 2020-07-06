@@ -53,7 +53,7 @@ NR > 2 {
 	else if ( is_inside_code_block == 1 ) {
 		# If inside code block, don't print or do anything,
 		# just store text into buffer
-		syntax_highlighting__contents = syntax_highlighting__contents text "\r"
+		syntax_highlighting__contents = syntax_highlighting__contents text "\n"
 		text = ""
 	}
 	else	{
