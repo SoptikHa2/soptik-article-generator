@@ -90,6 +90,8 @@ cp "$source_directory/"*.css "$output_directory/html/css" 2>/dev/null || true
 cp "$source_directory/"*.js "$output_directory/html/js" 2>/dev/null || true
 cp "$source_directory/"*.html "$output_directory/html" 2>/dev/null || true
 cp "$source_directory/tags.html" "$output_directory/tags.html" 2>/dev/null || true
+# And all asset files
+cp "$source_directory/assets" "$output_directory/assets/" -r 2>/dev/null || true
 # Prepare index file
 cat "$output_directory/head.html" > "$output_directory/html/index.html"
 cat "$output_directory/head.index.html" >> "$output_directory/html/index.html"
