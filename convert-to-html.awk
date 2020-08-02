@@ -93,6 +93,7 @@ NR > 2 {
 			enclose_in_p=0
 		}
 		if ( text ~ /^[ ]*>/ ) { # Quote
+            text=gensub(/^[ ]*>[ ]*/, "", "1", text)
 			text= "<q>" text "</q>"
 		}
 	}
