@@ -19,13 +19,13 @@ except ImportError:
     print('Error: Python3 library "pygments" not found. Syntax highlighting won\'t be used.', file=sys.stderr)
     # Print whatever we received as source code
     if len(sys.argv) >= 2:
-        print(get_contents(sys.argv[1]))
+        print("<pre>" + get_contents(sys.argv[1]) + "</pre>")
     sys.exit()
 if len(sys.argv) < 3:
     print('Error: Expected source code and language name. Syntax highlighting won\'t be used.', file=sys.stderr)
     # Print whatever we received as source code
     if len(sys.argv) >= 2:
-        print(get_contents(sys.argv[1]))
+        print("<pre>" + get_contents(sys.argv[1]) + "</pre>")
     sys.exit()
 
 try:
