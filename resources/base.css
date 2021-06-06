@@ -17,7 +17,7 @@ h1, h2, h3 {
 pre, code {
 	font-family: "Courier New", Courier, monospace;
 	padding: 2px;
-	max-width: 650px;
+	max-width: 1050px;
 	overflow-x: auto;
 }
 pre {
